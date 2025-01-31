@@ -1,14 +1,14 @@
 services:
-  vue-app:
-    build:
-      context: vue-frontend
-    ports:
-      - "8081:8080"
+  # vue-app:
+  #   build:
+  #     context: vue-frontend
+  #   ports:
+  #     - "8081:8080"
   rails-app:
     build:
       context: rails-api
     volumes:
-      - ./rails-api:/app  # Ensure this path is correct
+      - ./rails-api:/app # Ensure this path is correct
     ports:
       - "3000:3000"
     environment:
@@ -16,6 +16,8 @@ services:
       - DATABASE_URL=postgres://postgres:password@db:5432/my_database
     depends_on:
       - db
+    command: >
+      sh -c "rails db:migrate && rails db:setup && rails server -b 0.0.0.0"
   db:
     image: postgres:latest
     volumes:
