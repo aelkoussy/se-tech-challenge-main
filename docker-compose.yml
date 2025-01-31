@@ -1,4 +1,3 @@
-version: '3'
 services:
   vue-app:
     build:
@@ -8,6 +7,8 @@ services:
   rails-app:
     build:
       context: rails-api
+    volumes:
+      - ./rails-api:/app  # Ensure this path is correct
     ports:
       - "3000:3000"
     environment:
@@ -23,6 +24,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=my_database
+    ports:
+      - "5432:5432"
 
 volumes:
   pg_data:
