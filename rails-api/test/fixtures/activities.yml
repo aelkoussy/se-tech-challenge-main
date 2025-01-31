@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  price: 9.99
+  currency: MyString
+  rating: 1.5
+  special_offer: false
+  supplier: one
+
+two:
+  title: MyString
+  price: 9.99
+  currency: MyString
+  rating: 1.5
+  special_offer: false
+  supplier: two
