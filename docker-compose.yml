@@ -1,13 +1,28 @@
 version: '3'
 services:
-  spring-boot-app:
-    build:
-      context: spring-boot-service
-    ports:
-      - "8080:8080"
-
   vue-app:
     build:
       context: vue-frontend
     ports:
       - "8081:8080"
+  rails-app:
+    build:
+      context: rails-api
+    ports:
+      - "3000:3000"
+    environment:
+      - RAILS_ENV=development
+      - DATABASE_URL=postgres://postgres:password@db:5432/my_database
+    depends_on:
+      - db
+  db:
+    image: postgres:latest
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=my_database
+
+volumes:
+  pg_data:
