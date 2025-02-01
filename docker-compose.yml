@@ -4,11 +4,21 @@ services:
   #     context: vue-frontend
   #   ports:
   #     - "8081:8080"
+  nextjs:
+    build:
+      context: nextjs-frontend
+    ports:
+      - "5000:5000" # Map the container's port to the host
+    volumes:
+      - ./nextjs-frontend:/app  # Mount the nextjs-frontend directory to /app in the container
+    environment:
+      - NODE_ENV=development # Set the environment variable
+      - PORT=5000 # Set the port for Next.js
   rails-app:
     build:
       context: rails-api
     volumes:
-      - ./rails-api:/app # Ensure this path is correct
+      - ./rails-api:/app
     ports:
       - "3000:3000"
     environment:
