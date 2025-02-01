@@ -16,8 +16,9 @@ services:
       - DATABASE_URL=postgres://postgres:password@db:5432/my_database
     depends_on:
       - db
+      - meilisearch
     command: >
-      sh -c "rm -f /app/tmp/pids/server.pid && rails db:migrate && rails db:setup && rails server -b 0.0.0.0"
+      sh -c "rm -f /app/tmp/pids/server.pid && rails db:migrate && rails db:setup  && rails server -b 0.0.0.0"
   db:
     image: postgres:latest
     volumes:
@@ -28,6 +29,12 @@ services:
       - POSTGRES_DB=my_database
     ports:
       - "5432:5432"
+  meilisearch:
+    image: getmeili/meilisearch:v1.12
+    ports:
+      - "7700:7700"
+    environment:
+      MEILI_MASTER_KEY: 'your_master_key' # for production, this will be different
 
 volumes:
   pg_data:
