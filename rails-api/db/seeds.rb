@@ -46,3 +46,6 @@ activities_data.each do |activity_data|
   )
 end
 puts "Seeded #{Activity.count} activities."
+
+Activity.reindex!
+Supplier.reindex!

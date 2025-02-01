@@ -5,12 +5,13 @@
 
 # Read more: https://github.com/cyu/rack-cors
 
-# Rails.application.config.middleware.insert_before 0, Rack::Cors do
-#   allow do
-#     origins "example.com"
-#
-#     resource "*",
-#       headers: :any,
-#       methods: [:get, :post, :put, :patch, :delete, :options, :head]
-#   end
-# end
+#  Simple for dev purposes, in reality this will probably be allowed only for the frontend app's domain
+Rails.application.config.middleware.insert_before 0, Rack::Cors do
+  allow do
+    origins "http://localhost:5000" # Update this to match the origin of your frontend application
+
+    resource "*",
+             headers: :any,
+             methods: %i[get post put patch delete options head]
+  end
+end
