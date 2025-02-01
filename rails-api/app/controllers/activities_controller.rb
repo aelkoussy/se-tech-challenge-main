@@ -1,9 +1,14 @@
 class ActivitiesController < ApplicationController
-  before_action :set_activity, only: %i[ show update destroy ]
+  before_action :set_activity, only: %i[show update destroy]
 
   # GET /activities
+  # TODO this should have pagination
   def index
-    @activities = Activity.all
+    if params[:query].present?
+      @activities = Activity.search(params[:query]) # TODO if we need supplier info, we should do includes to avoid N+1 queries
+    else
+      @activities = Activity.all
+    end
 
     render json: @activities
   end
@@ -39,13 +44,16 @@ class ActivitiesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_activity
-      @activity = Activity.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def activity_params
-      params.expect(activity: [ :title, :price, :currency, :rating, :special_offer, :supplier_id ])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_activity
+    @activity = Activity.find(params.expect(:id))
+  end
+
+  # Only allow a list of trusted parameters through.
+  def activity_params
+    params.expect(
+      activity: %i[title price currency rating special_offer supplier_id]
+    )
+  end
 end
