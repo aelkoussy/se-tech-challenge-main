@@ -1,19 +1,26 @@
-# Use the official Node.js image as a base
+# Use minimal Node.js image
 FROM node:23-alpine
 
-# Set the working directory
+# Install pnpm globally
+RUN npm install -g pnpm
+
+# Set working directory
 WORKDIR /app
 
-COPY package.json ./
+# Copy package.json and pnpm-lock.yaml first (to leverage caching)
+COPY package.json pnpm-lock.yaml ./
 
-# Install dependencies using yarn
-RUN yarn install
+# Install dependencies without symlink issues
+RUN pnpm install --frozen-lockfile --strict-peer-dependencies
 
 # Copy the rest of the application code
 COPY . .
 
-# Expose the port the app runs on
+# Ensure node_modules symlinks work inside the container
+RUN pnpm rebuild
+
+# Expose port for development
 EXPOSE 5000
 
-# Start the Next.js application in development mode
-CMD ["yarn", "dev"]
+# Start Next.js in development mode
+CMD ["pnpm", "dev"]
