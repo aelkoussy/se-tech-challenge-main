@@ -1,4 +1,5 @@
 "use client";
+
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
@@ -6,9 +7,31 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
+import React from "react";
+
+// Extracted style constants for clarity
+const cardStyles = {
+  maxWidth: 345,
+  height: 450,
+  borderRadius: 2,
+  boxShadow: 3,
+  transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
+  display: "flex",
+  flexDirection: "column",
+  "&:hover": {
+    transform: "scale(1.02)",
+    boxShadow: 6,
+  },
+};
+
+const titleContainerStyles = {
+  height: 90,
+  display: "flex",
+};
 
 interface ActivityCardProps {
   title: string;
+  imageUrl?: string; // optional image URL for flexibility
   price: number;
   rating: number;
   special_offer: boolean;
@@ -16,45 +39,30 @@ interface ActivityCardProps {
   supplierAddress: string;
 }
 
-export const ActivityCard = ({
+/**
+ * ActivityCard displays a card with an image, title, rating (stars and numeric value),
+ * price information (with special offer indication), and supplier details.
+ */
+const ActivityCardComponent: React.FC<ActivityCardProps> = ({
   title,
+  imageUrl = "https://images.unsplash.com/photo-1735527919007-3ba8d909049e?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3",
   price,
   rating,
   special_offer,
   supplierName,
   supplierAddress,
-}: ActivityCardProps) => {
-  // Define a fixed height for the title area.
-  const TITLE_HEIGHT = 90;
-
+}) => {
   return (
-    <Card
-      sx={{
-        maxWidth: 345,
-        height: 450, // Fixed overall height for consistency
-        borderRadius: 2,
-        boxShadow: 3,
-        transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
-        display: "flex",
-        flexDirection: "column",
-        "&:hover": {
-          transform: "scale(1.02)",
-          boxShadow: 6,
-        },
-      }}
-    >
+    <Card sx={cardStyles}>
       <CardActionArea
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          height: "100%",
-        }}
+        sx={{ display: "flex", flexDirection: "column", height: "100%" }}
       >
         <CardMedia
           component="img"
           height="180"
-          image="https://images.unsplash.com/photo-1735527919007-3ba8d909049e?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3"
-          alt={title}
+          image={imageUrl}
+          alt={`Image for ${title}`}
+          sx={{ objectFit: "cover" }}
         />
         <CardContent
           sx={{
@@ -65,13 +73,8 @@ export const ActivityCard = ({
             pt: 2,
           }}
         >
-          {/* Title container with fixed height */}
-          <Box
-            sx={{
-              height: TITLE_HEIGHT,
-              display: "flex",
-            }}
-          >
+          {/* Fixed title area */}
+          <Box sx={titleContainerStyles}>
             <Typography
               variant="h6"
               component="div"
@@ -107,7 +110,7 @@ export const ActivityCard = ({
             </Box>
           </Box>
 
-          {/* Price section on its own line */}
+          {/* Price section */}
           <Box sx={{ mb: 1 }}>
             {special_offer ? (
               <>
@@ -144,3 +147,6 @@ export const ActivityCard = ({
     </Card>
   );
 };
+
+// Wrap in React.memo to avoid unnecessary re-renders if props don't change.
+export const ActivityCard = React.memo(ActivityCardComponent);
