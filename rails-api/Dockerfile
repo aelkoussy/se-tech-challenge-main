@@ -3,22 +3,25 @@ FROM ruby:3.3
 
 # Set environment variables
 ENV RAILS_ENV=development \
-    BUNDLE_PATH=/gems
-
-# Install Rails globally
-RUN gem install rails
+    BUNDLE_PATH=/gems \
+    BUNDLE_APP_CONFIG=/gems/.bundle \
+    BUNDLE_CACHE_ALL=true
 
 # Install dependencies
 RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
 
+# Install Rails globally if needed (optional, as you can include it in your Gemfile)
+RUN gem install rails
+
 # Set the working directory
 WORKDIR /app
 
-# Copy the Gemfile and Gemfile.lock first (to leverage Docker caching)
+# Cache bundler dependencies by copying Gemfiles first
 COPY Gemfile Gemfile.lock ./
 
-# Install gems
-RUN bundle install
+# Pre-configure bundler to use deployment mode if desired and install gems
+RUN bundle config set --local without 'production' && \
+    bundle install --jobs=4 --retry=3
 
 # Copy the rest of the app files
 COPY . .

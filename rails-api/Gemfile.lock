@@ -76,9 +76,9 @@ GEM
     base64 (0.2.0)
     bcrypt_pbkdf (1.1.1)
     bcrypt_pbkdf (1.1.1-arm64-darwin)
-    bcrypt_pbkdf (1.1.1-x86_64-darwin)
     benchmark (0.4.0)
     bigdecimal (3.1.9)
+    blueprinter (1.1.2)
     bootsnap (1.18.4)
       msgpack (~> 1.2)
     brakeman (7.0.0)
@@ -111,6 +111,9 @@ GEM
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    google-protobuf (4.29.3-x86_64-linux)
+      bigdecimal
+      rake (>= 13)
     httparty (0.22.0)
       csv
       mini_mime (>= 1.0.0)
@@ -181,8 +184,6 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.2-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.18.2-x86_64-darwin)
-      racc (~> 1.4)
     nokogiri (1.18.2-x86_64-linux-gnu)
       racc (~> 1.4)
     nokogiri (1.18.2-x86_64-linux-musl)
@@ -193,9 +194,12 @@ GEM
       ast (~> 2.4.1)
       racc
     pg (1.5.9)
+    pg_query (6.0.0)
+      google-protobuf (>= 3.25.3)
     pp (0.6.2)
       prettyprint
     prettyprint (0.2.0)
+    prosopite (1.4.2)
     psych (5.2.3)
       date
       stringio
@@ -323,7 +327,6 @@ GEM
     thruster (0.1.10)
     thruster (0.1.10-aarch64-linux)
     thruster (0.1.10-arm64-darwin)
-    thruster (0.1.10-x86_64-darwin)
     thruster (0.1.10-x86_64-linux)
     timeout (0.4.3)
     tzinfo (2.0.6)
@@ -346,11 +349,12 @@ PLATFORMS
   arm-linux-gnu
   arm-linux-musl
   arm64-darwin
-  x86_64-darwin
+  x86_64-linux
   x86_64-linux-gnu
   x86_64-linux-musl
 
 DEPENDENCIES
+  blueprinter (~> 1.1)
   bootsnap
   brakeman
   debug
@@ -359,6 +363,8 @@ DEPENDENCIES
   kamal
   meilisearch-rails
   pg (~> 1.1)
+  pg_query
+  prosopite
   puma (>= 5.0)
   rack-cors
   rails (~> 8)

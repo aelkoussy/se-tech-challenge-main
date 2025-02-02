@@ -21,6 +21,7 @@ services:
       context: rails-api
     volumes:
       - ./rails-api:/app
+    stop_grace_period: 2s
     ports:
       - "3000:3000"
     environment:
