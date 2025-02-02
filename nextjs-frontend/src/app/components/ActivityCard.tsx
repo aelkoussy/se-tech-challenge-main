@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 
 interface ActivityCardProps {
   title: string;
-  price: string;
+  price: number;
   rating: number;
   special_offer: boolean;
   supplierName: string;
