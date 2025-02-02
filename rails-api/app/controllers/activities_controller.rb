@@ -5,7 +5,6 @@ class ActivitiesController < ApplicationController
   # TODO this should have pagination
   def index
     if params[:query].present?
-      # TODO something is wrong here with meilisearch itself, it should give results for this method but it doesn't seem to work
       @activities = Activity.search(params[:query]) # TODO if we need supplier info, we should do includes to avoid N+1 queries
     else
       @activities = Activity.all
