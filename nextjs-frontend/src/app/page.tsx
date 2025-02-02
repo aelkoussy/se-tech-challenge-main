@@ -1,11 +1,15 @@
 "use client";
 import { useState } from "react";
+import { ActivityCard } from "./components/ActivityCard";
 import { SearchInput } from "./components/MaterialInput";
 
 const HomePage = () => {
   const [inputValue, setInputValue] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
+  // TODO add types
+  // TODO add tests
+  // TODO add debounce here to avoid too many requests
   const handleInputChange = async (event) => {
     const value = event.target.value;
     setInputValue(value);
@@ -20,6 +24,7 @@ const HomePage = () => {
       const data = await response.json();
       setSearchResults(data); // Update state with the response data
     } catch (error) {
+      // TODO add error handling showing user a nice message to try again later
       console.error(
         "There has been a problem with your fetch operation:",
         error
@@ -38,7 +43,15 @@ const HomePage = () => {
       <div>
         {/* TODO this will be mapped to cards for the results */}
         {searchResults.map((result, index) => (
-          <div key={index}>{result.title}</div>
+          <ActivityCard
+            key={index}
+            title={result.title}
+            price={result.price}
+            rating={result.rating}
+            special_offer={result.special_offer}
+            supplierName={result.supplier.name}
+            supplierAddress={result.supplier.address}
+          />
         ))}
       </div>
     </div>

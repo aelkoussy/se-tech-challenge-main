@@ -5,13 +5,20 @@ class ActivitiesController < ApplicationController
   # TODO this should have pagination
   def index
     if params[:query].present?
-      @activities = Activity.search(params[:query]) # TODO if we need supplier info, we should do includes to avoid N+1 queries
+      @activities = Activity.includes(:supplier).search(params[:query]) # TODO if we need supplier info, we should do includes to avoid N+1 queries
     else
       @activities = Activity.all
     end
 
     # TODO consider adding a serializer
-    render json: @activities
+    render json:
+             @activities.to_json(
+               include: {
+                 supplier: {
+                   only: %i[name address]
+                 }
+               }
+             )
   end
 
   # GET /activities/1
