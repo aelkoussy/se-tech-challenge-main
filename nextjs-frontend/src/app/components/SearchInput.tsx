@@ -15,10 +15,16 @@ export const SearchInput: React.FC<SearchInputProps> = ({
 }) => {
   return (
     <TextField
-      id="standard-basic"
+      fullWidth
       label={label}
-      variant="standard"
+      variant="outlined"
+      value={value}
       onChange={onChange}
+      sx={{
+        mb: 2,
+        backgroundColor: "white",
+        borderRadius: 2,
+      }}
     />
   );
 };

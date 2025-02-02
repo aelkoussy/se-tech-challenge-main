@@ -1,9 +1,11 @@
 "use client";
-import { useDebouncedCallback } from "use-debounce";
-
+import Container from "@mui/material/Container";
+import Grid2 from "@mui/material/Grid2";
+import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from "react";
+import { useDebouncedCallback } from "use-debounce";
 import { ActivityCard } from "./components/ActivityCard";
-import { SearchInput } from "./components/MaterialInput";
+import { SearchInput } from "./components/SearchInput";
 
 interface Supplier {
   name: string;
@@ -18,12 +20,10 @@ interface Activity {
   supplier: Supplier;
 }
 
-// TODO add tests
 const HomePage: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [searchResults, setSearchResults] = useState<Activity[]>([]);
 
-  // Function to fetch search results with a log to test timing
   const fetchResults = async (value: string): Promise<void> => {
     console.log("Fetching results for:", value);
     try {
@@ -36,19 +36,21 @@ const HomePage: React.FC = () => {
       const data: Activity[] = await response.json();
       setSearchResults(data);
     } catch (error) {
-      console.error(
-        "There has been a problem with your fetch operation:",
-        error
-      );
-      // TODO: show a friendly error message to the user
+      console.error("Error fetching search results:", error);
+      // TODO: Show a user-friendly error message
     }
   };
 
-  // Create a debounced version of fetchResults that delays execution by 4000ms.
+  // Debounce the fetch to reduce network calls
   const debouncedFetchResults = useDebouncedCallback((value: string) => {
     fetchResults(value);
   }, 300);
-  // Clean up the debounced function on component unmount.
+
+  // Fetch initial results on mount (even before user input)
+  useEffect(() => {
+    fetchResults("");
+  }, []);
+
   useEffect(() => {
     return () => {
       debouncedFetchResults.cancel();
@@ -64,27 +66,32 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Get your guide</h1>
-      <SearchInput
-        label="Enter something here"
-        value={inputValue}
-        onChange={handleInputChange}
-      />
-      <div>
+    <Container sx={{ py: 8 }}>
+      <Typography variant="h3" component="h1" align="center" gutterBottom>
+        Get Your Guide
+      </Typography>
+      <Container maxWidth="sm" sx={{ mb: 4 }}>
+        <SearchInput
+          label="Search activities"
+          value={inputValue}
+          onChange={handleInputChange}
+        />
+      </Container>
+      <Grid2 container spacing={4}>
         {searchResults.map((result, index) => (
-          <ActivityCard
-            key={index}
-            title={result.title}
-            price={result.price}
-            rating={result.rating}
-            special_offer={result.special_offer}
-            supplierName={result.supplier.name}
-            supplierAddress={result.supplier.address}
-          />
+          <Grid2 key={index} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+            <ActivityCard
+              title={result.title}
+              price={result.price}
+              rating={result.rating}
+              special_offer={result.special_offer}
+              supplierName={result.supplier.name}
+              supplierAddress={result.supplier.address}
+            />
+          </Grid2>
         ))}
-      </div>
-    </div>
+      </Grid2>
+    </Container>
   );
 };
 
