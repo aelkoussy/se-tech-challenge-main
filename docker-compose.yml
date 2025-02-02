@@ -11,8 +11,8 @@ services:
       - "5000:5000" # Map the container's port to the host
     volumes:
       - ./nextjs-frontend:/app # Mount the source code for hot reloading
-      # - nextjs_node_modules:/app/node_modules # Use a named volume for node_modules
-      - /app/node_modules # to avoid overriding the node_modules in the container by the ones on the localhost (while developing and for vscode, etc...)
+      - nextjs_node_modules:/app/node_modules  # Use a named volume for node_modules
+
     environment:
       - NODE_ENV=development # Set the environment variable
       - PORT=5000 # Set the port for Next.js

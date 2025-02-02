@@ -11,7 +11,7 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 
 # Install dependencies without symlink issues
-RUN pnpm install --frozen-lockfile --strict-peer-dependencies
+RUN pnpm install --frozen-lockfile
 
 # Copy the rest of the application code
 COPY . .
