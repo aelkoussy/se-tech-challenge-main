@@ -1,5 +1,5 @@
 class SuppliersController < ApplicationController
-  before_action :set_supplier, only: %i[ show update destroy ]
+  before_action :set_supplier, only: %i[show update destroy]
 
   # GET /suppliers
   def index
@@ -29,23 +29,27 @@ class SuppliersController < ApplicationController
     if @supplier.update(supplier_params)
       render json: @supplier
     else
-      render json: @supplier.errors, status: :unprocessable_entity
+      render json: { errors: @supplier.errors }, status: :unprocessable_entity
     end
   end
 
   # DELETE /suppliers/1
   def destroy
-    @supplier.destroy!
+    @supplier.destroy
+    head :no_content
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_supplier
-      @supplier = Supplier.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def supplier_params
-      params.expect(supplier: [ :name, :address, :zip, :city, :country ])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_supplier
+    @supplier = Supplier.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: "Supplier not found" }, status: :not_found
+  end
+
+  # Only allow a list of trusted parameters through.
+  def supplier_params
+    params.require(:supplier).permit(:name, :description)
+  end
 end
