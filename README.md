@@ -42,4 +42,11 @@ docker-compose exec rails-app bundle exec rspec
 
 ---
 
+## Things left out for sake of time:
+
+1. Adding pagination: frontend, backend and in meilisearch
+2. Maybe adding caching in Rails (mainly low level caching on Redis)
+3. Possibly offloading the search load fully to Meilisearch (or Elastic/Solr) instead of fetching IDs then loading from DB, this reduces load on DB but increases risk for stale data
+4. Adding tests for the frontend and e2e tests
+
 If you have any questions or need further details, please let me know. Enjoy exploring the app!

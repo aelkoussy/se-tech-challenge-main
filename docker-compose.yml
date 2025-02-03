@@ -1,18 +1,11 @@
 services:
-  # vue-app:
-  #   build:
-  #     context: vue-frontend
-  #   ports:
-  #     - "8081:8080"
   nextjs:
     build:
       context: nextjs-frontend
     ports:
-      - "5000:5000" # Map the container's port to the host
+      - "5000:5000"
     volumes:
       - ./nextjs-frontend:/app # Mount the source code for hot reloading
-
-
     environment:
       - NODE_ENV=development # Set the environment variable
       - PORT=5000 # Set the port for Next.js
