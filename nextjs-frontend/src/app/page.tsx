@@ -95,7 +95,9 @@ const HomePage: React.FC = () => {
       {/* Display error message if any */}
       {error && (
         <Container maxWidth="sm" sx={{ mb: 4 }}>
-          {/* Note: it shows an error in editor but there is no error and it works, you can set error to error to test... */}
+          {/* Note: it shows an error in editor but there is no error and it works, you can set error to true to test it... */}
+          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          @ts-ignore */}
           <Alert severity="error">{error}</Alert>
         </Container>
       )}
