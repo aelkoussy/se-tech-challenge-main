@@ -5,9 +5,11 @@ class ActivitiesController < ApplicationController
   def index
     if params[:query].present?
       # Further things for production and scaling: would be to paginate this based on meilisearch and the query and keep track of which page the user is seeing
-      # there are other was to handle this, for example we could rely on Meilisearch json output directly and offload this load to it instead of Rails
+
+      # There are other ways to handle this, for example we could rely on Meilisearch json output directly and offload the load to it instead of Rails
       # but then we risk getting data that is stale, this approach here gets the ids from meilisearch then fetches the data from the DB to ensure data is up to date
-      activities = Activity.includes(:supplier).search(params[:query]) # TODO if we need supplier info, we should do includes to avoid N+1 queries
+      # We can also add caching if the load is extremely high to reduce load on Meilisearch and the DB
+      activities = Activity.includes(:supplier).search(params[:query])
     else
       # TODO this should be paginated, but for the sake of simplicity we will just limit to 20
       activities = Activity.includes(:supplier).all.limit(20)
@@ -56,7 +58,7 @@ class ActivitiesController < ApplicationController
   def set_activity
     @activity = Activity.find_by(id: params[:id])
     unless @activity
-      render json: { error: 'Activity not found' }, status: :not_found
+      render json: { error: "Activity not found" }, status: :not_found
     end
   end
 
