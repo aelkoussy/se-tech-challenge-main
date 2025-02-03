@@ -12,7 +12,7 @@ import React from "react";
 // Extracted style constants for clarity
 const cardStyles = {
   maxWidth: 345,
-  height: 450,
+  height: 400,
   borderRadius: 2,
   boxShadow: 3,
   transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
@@ -25,7 +25,7 @@ const cardStyles = {
 };
 
 const titleContainerStyles = {
-  height: 90,
+  height: 75,
   display: "flex",
 };
 
@@ -76,11 +76,12 @@ const ActivityCardComponent: React.FC<ActivityCardProps> = ({
           {/* Fixed title area */}
           <Box sx={titleContainerStyles}>
             <Typography
-              variant="h6"
+              variant="subtitle1"
               component="div"
               sx={{
                 overflow: "hidden",
                 textOverflow: "ellipsis",
+                fontWeight: "bold",
                 display: "-webkit-box",
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: "vertical",
@@ -122,12 +123,21 @@ const ActivityCardComponent: React.FC<ActivityCardProps> = ({
                 >
                   Special Offer!
                 </Typography>
-                <Typography variant="body1" component="span" color="red">
+                <Typography
+                  variant="body1"
+                  component="span"
+                  color="red"
+                  sx={{ fontWeight: "bold", mr: 0.5 }}
+                >
                   From: {price} €
                 </Typography>
               </>
             ) : (
-              <Typography variant="body1" color="text.secondary">
+              <Typography
+                variant="body1"
+                color="text.main"
+                sx={{ fontWeight: "bold", mr: 0.5 }}
+              >
                 From: {price} €
               </Typography>
             )}
@@ -135,7 +145,7 @@ const ActivityCardComponent: React.FC<ActivityCardProps> = ({
 
           {/* Supplier details */}
           <Box>
-            <Typography variant="subtitle2" color="text.secondary">
+            <Typography variant="subtitle2" color="text.main">
               Provided by: {supplierName}
             </Typography>
             <Typography variant="body2" color="text.secondary">
