@@ -1,26 +1,26 @@
-# Use minimal Node.js image
-FROM node:23-alpine
+# Use a minimal Node.js image as the base
+FROM node:23-slim AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
 
-# Install pnpm globally
-RUN npm install -g pnpm
+# Enable corepack (which manages pnpm)
+RUN corepack enable
 
-# Set working directory
+# Set the working directory
 WORKDIR /app
 
-# Copy package.json and pnpm-lock.yaml first (to leverage caching)
+# Copy package.json and pnpm-lock.yaml first to leverage Docker layer caching
 COPY package.json pnpm-lock.yaml ./
 
-# Install dependencies without symlink issues
-RUN pnpm install --frozen-lockfile
+# Install dependencies using buildkit cache (if BuildKit is enabled)
+# This speeds up repeated installs during development.
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
 
-# Copy the rest of the application code
+# Copy the rest of your source code into the container
 COPY . .
-
-# Ensure node_modules symlinks work inside the container
-RUN pnpm rebuild
 
 # Expose port for development
 EXPOSE 5000
 
-# Start Next.js in development mode
+# Start the development server (pnpm dev should start your Next.js dev server)
 CMD ["pnpm", "dev"]
