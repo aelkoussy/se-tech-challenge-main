@@ -24,11 +24,13 @@ interface Activity {
 const HomePage: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [searchResults, setSearchResults] = useState<Activity[]>([]);
-  const [error, setError] = useState<string | null>("opa");
+  const [error, setError] = useState<string | null>(null);
 
   /**
    * Fetches activities based on the search query.
    * If the query is empty, it fetches all activities.
+   * We here only search by the title as per the requirement, but in a prod app, we might want to filter by more params
+   * For example we might want to filter by price, rating, etc.
    */
   const fetchResults = useCallback(async (query: string): Promise<void> => {
     console.log("Fetching results for:", query);
@@ -36,6 +38,7 @@ const HomePage: React.FC = () => {
       // Clear previous errors before fetching new results
       setError(null);
 
+      // typically in production you would use something like axios and define your host centerally not here
       const response = await fetch(
         `http://localhost:3000/activities?query=${encodeURIComponent(query)}`
       );
