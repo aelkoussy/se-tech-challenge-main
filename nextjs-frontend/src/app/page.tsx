@@ -1,8 +1,9 @@
 "use client";
+import Alert from "@mui/material/Alert";
 import Container from "@mui/material/Container";
 import Grid2 from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { ActivityCard } from "./components/ActivityCard";
 import { SearchInput } from "./components/SearchInput";
@@ -23,34 +24,46 @@ interface Activity {
 const HomePage: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [searchResults, setSearchResults] = useState<Activity[]>([]);
+  const [error, setError] = useState<string | null>("opa");
 
-  const fetchResults = async (value: string): Promise<void> => {
-    console.log("Fetching results for:", value);
+  /**
+   * Fetches activities based on the search query.
+   * If the query is empty, it fetches all activities.
+   */
+  const fetchResults = useCallback(async (query: string): Promise<void> => {
+    console.log("Fetching results for:", query);
     try {
+      // Clear previous errors before fetching new results
+      setError(null);
+
       const response = await fetch(
-        `http://localhost:3000/activities?query=${encodeURIComponent(value)}`
+        `http://localhost:3000/activities?query=${encodeURIComponent(query)}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
       const data: Activity[] = await response.json();
       setSearchResults(data);
-    } catch (error) {
-      console.error("Error fetching search results:", error);
-      // TODO: Show a user-friendly error message
+    } catch (err: unknown) {
+      console.error("Error fetching search results:", err);
+      // Set a friendly error message
+      setError(
+        "There was a problem fetching search results. Please try again later."
+      );
     }
-  };
+  }, []);
 
-  // Debounce the fetch to reduce network calls
-  const debouncedFetchResults = useDebouncedCallback((value: string) => {
-    fetchResults(value);
+  // Create a debounced callback to reduce network calls
+  const debouncedFetchResults = useDebouncedCallback((query: string) => {
+    fetchResults(query);
   }, 300);
 
   // Fetch initial results on mount (even before user input)
   useEffect(() => {
     fetchResults("");
-  }, []);
+  }, [fetchResults]);
 
+  // Clean up the debounced callback on unmount
   useEffect(() => {
     return () => {
       debouncedFetchResults.cancel();
@@ -60,9 +73,9 @@ const HomePage: React.FC = () => {
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ): void => {
-    const value = event.target.value;
-    setInputValue(value);
-    debouncedFetchResults(value);
+    const query = event.target.value;
+    setInputValue(query);
+    debouncedFetchResults(query);
   };
 
   return (
@@ -77,6 +90,16 @@ const HomePage: React.FC = () => {
           onChange={handleInputChange}
         />
       </Container>
+
+      {/* In Production this would be more sophisticated and in a separate component */}
+      {/* Display error message if any */}
+      {error && (
+        <Container maxWidth="sm" sx={{ mb: 4 }}>
+          {/* Note: it shows an error in editor but there is no error and it works, you can set error to error to test... */}
+          <Alert severity="error">{error}</Alert>
+        </Container>
+      )}
+
       <Grid2 container spacing={4}>
         {searchResults.map((result, index) => (
           <Grid2 key={index} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
