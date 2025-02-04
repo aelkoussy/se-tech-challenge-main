@@ -24,7 +24,14 @@ This assignment was targeted toward a Senior Backend Software Engineer role, so 
 
 ## Setup and Running the Project
 
-This project is containerized using Docker. To start the application along with its dependencies and seed the database and search index, run:
+This project is containerized using Docker. To start the application along with its dependencies and seed the database and search index, please run:
+
+Install frontend dependencies (one time setup)
+
+```bash
+cd nextjs-frontend && npm i -g pnpm && pnpm install
+```
+Then you can run the project using
 
 ```bash
 docker-compose up --build

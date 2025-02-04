@@ -19,6 +19,6 @@ COPY . .
 # Expose port for development
 EXPOSE 5000
 
-# Run the pnpm install when the container starts to avoid relying on host node_modules
+# NOTE: please run pnpm install in the nextjs directory before running docker
 # Start the development server (pnpm dev should start your Next.js dev server)
-CMD ["sh", "-c", "pnpm install && pnpm dev"]
+CMD ["sh", "-c", "pnpm dev"]

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "preserveSymlinks": true,
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
